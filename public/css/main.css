@@ -1,0 +1,145 @@
+body{
+	font-family: 'Orbitron', sans-serif;
+	background-image: url("../img/bg1_rotated%20.jpg");
+	/*background-image: url("../img/bg1.jpg");*/
+	color: white;
+}
+
+.playerStatus{
+	background:
+	radial-gradient(black 15%, transparent 16%) 0 0,
+	radial-gradient(black 15%, transparent 16%) 8px 8px,
+	radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+	radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+	background-color:#282828;
+	background-size:16px 16px;
+	padding: 4px 0;
+}
+
+.playerStatus .icon{
+	padding: 4px;
+	width: 48px;
+	height: 48px;
+}
+
+.progress{
+	margin:0;
+}
+
+.playerStatus .progress{
+	margin-top: 12px;
+}
+
+.teamStatus{
+	margin-top: 80px;
+}
+
+.partner img{
+	height: 200px;
+	width: 100%;
+}
+
+.health-bar, .shield-bar{
+	transition: width 1s;
+}
+
+.partner .health-bar, .partner .shield-bar{
+	height: 20px;
+}
+
+.health-bar{
+	background-color: green;
+}
+
+.shield-bar{
+	background-color: gold;
+}
+
+.messages{
+	background-color: rgba(16,16,16,0.8);
+	margin-top: 80px;
+	text-align: center;
+	color: white;
+}
+
+.messages span{
+	font-size: 2em;
+	padding: 16px;
+}
+
+.panelBottom{
+	position: absolute;
+	bottom: 0;
+	height: 108px;
+	padding:16px 0;
+	width: 100%;
+}
+
+.timer{
+	margin-top: 8px;
+	font-size: 3em;
+}
+
+.button-left{
+	position: relative;
+	background:
+	radial-gradient(black 15%, transparent 16%) 0 0,
+	radial-gradient(black 15%, transparent 16%) 8px 8px,
+	radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+	radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+	background-color:#282828;
+	background-size:16px 16px;
+    height:88px;
+    width: 88px;
+    -moz-border-radius: 0 88px 0 0;
+    border-radius: 0 88px 0 0;
+    float: left;
+    margin-left: -16px;
+}
+
+.button-right{
+	position: relative;
+	background:
+	radial-gradient(black 15%, transparent 16%) 0 0,
+	radial-gradient(black 15%, transparent 16%) 8px 8px,
+	radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+	radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+	background-color:#282828;
+	background-size:16px 16px;
+    height:88px;
+    width: 88px;
+    -moz-border-radius: 0 0 0 0;
+    border-radius: 88px 0 0 0;
+    float: right;
+    margin-right: -16px;
+}
+
+.button-left > *{
+	position: absolute;
+	bottom: 16px;
+	left: 16px;
+}
+
+.button-right > *{
+	position: absolute;
+	bottom: 16px;
+	right: 16px;
+}
+
+.state-btn{
+	transition: width 2s, height 2s 2s;
+}
+
+.state-btn.active{
+	width: 100px;
+	height: 100px;
+}
+
+table, td{
+	border: 0;
+}
+
+td{
+	text-align: center;
+	vertical-align: middle;
+}
