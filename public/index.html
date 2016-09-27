@@ -47,17 +47,17 @@
       <div player-id="2" class="col-xs-2 partner">
         <img src="img/player_placeholder.png" alt="Partner_2">
         <div class="progress"><div class="health-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>
-        <div class="shield-bar" style="width:100%;"></div>
+        <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>
       </div>
       <div player-id="3" class="col-xs-2 partner">
         <img src="img/player_placeholder.png" alt="Partner_3">
         <div class="progress"><div class="health-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>
-        <div class="shield-bar" style="width:100%;"></div>
+        <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>
       </div>
       <div player-id="4" class="col-xs-2 partner">
         <img src="img/player_placeholder.png" alt="Partner_4">
         <div class="progress"><div class="health-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>
-        <div class="shield-bar" style="width:100%;"></div>
+        <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>
       </div>
     </div>
 
@@ -69,17 +69,23 @@
 
     <div class="row panelBottom">
       <div class="col-xs-2 text-left">
-        <div class="button-left"><button id="buttonBomb" type="button" class="btn btn-danger state-btn">B</button></div>
+        <div class="button-left">
+          <button id="buttonTakeBomb" type="button" class="btn state-btn">B</button>
+          <button id="buttonBomb" button-state="0" type="button" class="btn btn-danger state-btn" style="display:none;">B</button>
+        </div>
       </div>
+      
       <div class="col-xs-8 text-center timer">
         <span class="time"></span>
       </div>
+      
       <div class="col-xs-2">
-        <div class="button-right"><button id="buttonMedikit" button-state="0" type="button" class="btn btn-success state-btn">M</button></div>
+        <div class="button-right">
+          <button id="buttonTakeItem" type="button" class="btn state-btn">I</button>
+          <button id="buttonMedikit" button-state="0" type="button" class="btn state-btn btn-success" style="display:none;">M</button>
+          <button id="buttonVest" button-state="0" type="button" class="btn btn-warning state-btn" style="display:none;">V</button>
+        </div>
       </div>
-      <div class="col-xs-2" style="display:none;">
-        <div class="button-right"><button id="buttonVest" button-state="0" type="button" class="btn btn-success state-btn">V</button></div>
-    </div>
   </div>
   
   <script src="socket.io/socket.io.js"></script>

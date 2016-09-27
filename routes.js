@@ -13,7 +13,7 @@ module.exports = {
 
 		//Activar Medikit
 		app.get('/heal_user/:match_id/:player_id', function(req, res){
-			io.emit('heal_user', {match_id: req.params.match_id, player_id: req.params.chip_id}); //aviso a demas dispositivos
+			io.emit('heal_user', {match_id: req.params.match_id, player_id: req.params.player_id}); //aviso a demas dispositivos
 			res.send("ok"); //mensaje de respuesta
 		});
 

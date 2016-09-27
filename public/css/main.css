@@ -23,6 +23,7 @@ body{
 }
 
 .progress{
+	background-color: #2a2a2a;
 	margin:0;
 }
 
@@ -56,7 +57,7 @@ body{
 }
 
 .messages{
-	background-color: rgba(16,16,16,0.8);
+	/*background-color: rgba(16,16,16,0.8);*/
 	margin-top: 80px;
 	text-align: center;
 	color: white;
@@ -127,6 +128,7 @@ body{
 }
 
 .state-btn{
+	background-color: rgba(100,100,100,0.5);
 	transition: width 2s, height 2s 2s;
 }
 
