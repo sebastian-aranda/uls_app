@@ -1,0 +1,34 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-barcodescanner": {
+            "PACKAGE_NAME": "cl.milenium.uls"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "cl.milenium.uls"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "cl.milenium.uls"
+        },
+        "cordova-plugin-websocket": {
+            "PACKAGE_NAME": "cl.milenium.uls"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "cl.milenium.uls"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "cl.milenium.uls"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "cl.milenium.uls"
+        }
+    }
+}

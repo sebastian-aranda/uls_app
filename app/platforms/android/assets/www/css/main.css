@@ -1,0 +1,270 @@
+/*COLORS
+
+red: #ff4038;
+blue: #006dfd;
+*/
+
+html {
+	position: relative;
+	height: 100%;
+	background: url(../img/background_blue.png) no-repeat center center fixed;
+	background-size: cover;
+}
+
+body{
+	min-height: 100%;
+	background: none;
+	color: white;
+	margin-bottom: 0px;
+}
+
+.content{
+	display: table;
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+}
+
+.view{
+	width: 100%;
+	height: 100%;
+}
+
+#wait_page .row, #battleresume_page .row{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100%;
+}
+
+.team-flag{
+	text-align: center;
+	color: white;
+	font-weight: bold;
+}
+
+#wait_page .team-flag img{
+	width: 100px;
+	height: auto;
+	margin: 8px 0;
+}
+
+.playerStatus{
+	padding-top: 16px;
+}
+
+.partner .playerPhoto, .playerStatus .playerPhoto{
+	width: 100%;
+	height: 72px;
+}
+
+.playerPhotoResume{
+	height: 100%;
+	width: auto;
+}
+
+.playerStatus .pbContainer{
+	padding:0 16px;
+}
+
+.playerStatus .bar-icon{
+	height: 16px;
+	width: auto;
+}
+
+.teamStatus{
+	margin-top: 32px;
+}
+
+.partner{
+	position: relative;
+}
+
+/*
+//For bar-icons
+.partner .bar-icon{
+	height: 6px;
+	width: auto;
+}
+
+.partner .progress{
+	margin-left: 10px;
+}*/
+
+.partner .health-bar, .partner .shield-bar, .partner .progress{
+	height: 8px;
+}
+
+.middleContainer{
+	width: 100%;
+    height: 100%;
+    display: table;
+    text-align: center;
+}
+
+.middleContainer .content{
+	display: table-cell;
+    vertical-align: middle;
+}
+
+.middleContainer .content .timer{
+	font-size: 2em;
+}
+
+.middleContainer .content img{
+	width: 100%;
+	height: auto;
+}
+
+.middleContainer .content .team-flag img{
+	width: 40%;
+	height: auto;
+}
+
+.middleContainer .content .team-flag span{
+	font-size: 12px;
+}
+
+.panelBottom{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+}
+
+.button-left img{
+	float: left;
+    height: 72px;
+    width: 72px;
+}
+
+.button-right img{
+	float: right;
+    height: 72px;
+    width: 72px;
+}
+
+.messages{
+	position: absolute;
+	bottom: 16px;
+	width: 100%;
+}
+
+.messages span{
+	color: white;
+	font-size: 1.5em;
+	padding: 16px;
+}
+
+.progress{
+	background-color: rgba(64,64,64,0.6);
+	position: relative;
+    overflow: visible;
+	margin:0;
+	margin-bottom: 2px;
+}
+
+.progress span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    text-align: center;
+ }
+
+.playerStatus .progress .bar-icon{
+	position: absolute;
+	left: -24px;
+	bottom: 0;
+}
+
+.partner .progress .bar-icon{
+	position: absolute;
+	left: -10px;
+	bottom: 0;
+}
+
+.health-bar, .shield-bar{
+	-webkit-transition: 1s;
+	transition: width 1s;
+}
+
+.health-bar{
+	background-color: green;
+}
+
+.health-bar.medium{
+	background-color: yellow;
+}
+
+.health-bar.low{
+	background-color: red;
+}
+
+.shield-bar{
+	background-color: gold;
+}
+
+.playerImg{
+	position: relative;	
+}
+
+.playerImg img.eliminated, .partner img.eliminated{
+	position: absolute;
+	z-index: 100;
+	width: 100%;
+	height: 72px;
+	top:0;
+	left:0;
+}
+
+table.battleResume-table th, table.battleResume-table td{
+	text-align: center;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+table.battleResume-table td.battleResume-player{
+	text-align: left;
+}
+
+table.battleResume-table tbody tr{
+	background-color: rgba(80,80,80, 0.7);
+}
+
+.battleResume-player img{
+	height: 32px;
+	width: auto;
+}
+
+.battleResume-player span{
+	padding-left: 8px;
+	font-size: 8px;
+
+}
+
+.team{
+	align-items: center;
+	text-align: center;
+}
+
+.battleResume-team img{
+	width: 80%;
+	height: auto;
+}
+
+.battleResume-team span{
+	font-size: 16px;
+	font-weight: bold;
+}
+
+/*.loader{
+	height: 100%;
+	background: url('./img/loader.gif') no-repeat center center;
+}*/
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
