@@ -1,29 +1,82 @@
+var nodeServer = 'http://190.46.179.93:3030';
+//var nodeServer = 'http://192.168.0.102:3030';
+//var railsServer = 'http://192.168.0.102:3000';
+var railsServer = 'http://uls2016.herokuapp.com';
+
+var socketServer = 'ws://'+nodeServer.substring(7)+'/echo/websocket';
+
+//var placas = [54355, 9171109, 762964, 0, 0, 0, 0, 0, 0, 0];
+//var placas = [54355, 0, 0, 0, 0, 9171109, 762964, 0, 0];
+
+//var duenios = ['Edo','Enzo','3','4','5', 'Seba','Marco','8','9','10']
+//var dispositivos = ['93cc5f1b1a3a8ca0', '55c9689c7200138e', '3', '4', '5', '59971d75d4fd1252', 'a8feb38a3117c721', '8', '9', '10'];
+
+var dispositivos = ['93cc5f1b1a3a8ca0', '55c9689c7200138e', '3', '4', '5', 'a8feb38a3117c721', '59971d75d4fd1252', '8', '9', '10'];
+
+var time, originalTime;
+var matchTimerValue = 10*60*1000; //Number of milliseconds
+var bombTimerValue = 1*60*1000;
+
+var match_id, team_id;
+var estadoPartida = 0;
+var bomb_state = 0;
+var buttonActive = {idButton: '', state: 0};
+var hpAlertInterval;
+
 document.addEventListener('deviceready', function() {
-	var nodeServer = 'http://192.168.0.101:3030';
-	var railsServer = 'http://192.168.0.102:3000';
-	//var railsServer = 'http://uls2016.herokuapp.com';
-	
-	var socketServer = 'ws://'+nodeServer.substring(7)+'/echo/websocket';
+	//Node Server Connection
+	var ws = new WebSocket(socketServer);
 
-	//var placas = [54355, 9171109, 762964, 0, 0, 0, 0, 0, 0, 0];
-	var placas = [54355, 0, 0, 0, 0, 9171109, 762964, 0, 0];
-	
-	//var duenios = ['Edo','Enzo','3','4','5', 'Seba','Marco','8','9','10']
-	//var dispositivos = ['93cc5f1b1a3a8ca0', '55c9689c7200138e', '3', '4', '5', '59971d75d4fd1252', 'a8feb38a3117c721', '8', '9', '10'];
-	var dispositivos = ['ffff1f36d06358a3', '55c9689c7200138e', '3', '4', '5', '59971d75d4fd1252', 'a8feb38a3117c721', '8', '9', '10'];
+    ws.onopen = function () {
+        //this.send('hello');
+    };
 
-	var matchTimerValue = 10*60*1000; //Number of milliseconds
-	var bombTimerValue = 1*60*1000;
+    ws.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+        switch(data.event){
+        	case 'start_match':
+        		if (team_id == 1)
+        			configureMatch([1,2,3,4,5]);
+        		else
+        			configureMatch([6,7,8,9,10]);
+        		startMatch(data.match_id);
+        		break;
+        	case 'receive_shot':
+        		if (estadoPartida == 1)
+        			handleReceiveShot(data.match_id, data.shooted_id);
+        		break;
+        	case 'heal_user':
+        		if (estadoPartida == 1)
+        			handleHealUser(data.player_id);
+        		break;
+        	case 'add_vest':
+        		if (estadoPartida == 1)
+        			handleAddVest(data.player_id);
+        		break;
+        	case 'planting_bomb':
+        		if (estadoPartida == 1)
+        			handlePlantingBomb(data.player_id);
+        		break;
+        	case 'defusing_bomb':
+        		if (estadoPartida == 1)
+        			handleDefusingBomb(data.player_id);
+        		break;	
+        	case 'player_die':
+        		if (estadoPartida == 1)
+        			handlePlayerDie(data.player_id);
+        		break;
+        }
+    };
 
-	var match_id, team_id;
-	var bomb_state = 0;
+    ws.onerror = function () {
+        console.log('error occurred!');
+    };
+
+    ws.onclose = function (event) {
+        //console.log('close code=' + event.code);
+    };
+
 	getMatchId();
-	
-	var estadoPartida = 1;
-	var time, originalTime;
-	
-	var buttonActive = {idButton: '', state: 0};
-	var hpAlertInterval;
 	
 	//Configurando Partida
 	if (dispositivos.indexOf(getDeviceId()) < 5){
@@ -32,10 +85,10 @@ document.addEventListener('deviceready', function() {
 	else{
 		selectTeam(2);
 	}
+
+	//Para verificar conexion
 	$.get(nodeServer+'/device_on/'+(dispositivos.indexOf(getDeviceId())+1)+'/d', function(res){});
 	
-	/*handleGetItem('medikit');
-	handleGetItem('bomb');*/
 
 	/* BOTONES */
 	$('#buttonBombActive').on('click', function(){
@@ -141,53 +194,6 @@ document.addEventListener('deviceready', function() {
 		}
 	});
 
-	//Node Server Connection
-	var ws = new WebSocket(socketServer);
-
-    ws.onopen = function () {
-        //this.send('hello');
-    };
-
-    ws.onmessage = function (event) {
-        var data = JSON.parse(event.data);
-        switch(data.event){
-        	case 'start_match':
-        		/*if (team_id == 1)
-        			//configureMatch([1,2,3,4,5]);
-        		else
-        			//configureMatch([6,7,8,9,10]);
-				*/
-        		startMatch(data.match_id);
-        		break;
-        	case 'receive_shot':
-        		handleReceiveShot(data.match_id, data.shooted_id);
-        		break;
-        	case 'heal_user':
-        		handleHealUser(data.player_id);
-        		break;
-        	case 'add_vest':
-        		handleAddVest(data.player_id);
-        		break;
-        	case 'planting_bomb':
-        		handlePlantingBomb(data.player_id);
-        		break;
-        	case 'defusing_bomb':
-        		handleDefusingBomb(data.player_id);
-        		break;	
-        	case 'player_die':
-        		handlePlayerDie(data.player_id);
-        		break;
-        }
-    };
-
-    ws.onerror = function () {
-        console.log('error occurred!');
-    };
-
-    ws.onclose = function (event) {
-        //console.log('close code=' + event.code);
-    };
-
     function startMatch(resId){
     	if (estadoPartida == 1 && resId == match_id){
     		$("#wait_page").hide();
@@ -277,21 +283,7 @@ document.addEventListener('deviceready', function() {
     }
 
     function handleDefusingBomb(msg){
-    	estadoPartida = 0;
-    	//TODO: bomb_state = 1;
-
-		$.get(railsServer+'/matches/resume_match?match_id='+match_id, function(res){
-			configureBattleResume(res);
-		});
-
-		navigator.vibrate(500);
-	    $('.messages span').html('Partida Terminada');
-    	$('.messages span').fadeIn(1500);
-    	
-    	setTimeout(function(){
-    		$("#matchstatus_page").hide();
-    		$("#battleresume_page").fadeIn(1000);
-    	}, 5000);
+    	matchEnd();
     }
 
     function handlePlayerDie(id){
@@ -365,8 +357,9 @@ document.addEventListener('deviceready', function() {
 		$.get(railsServer+'/matches/resume_match?match_id='+match_id, function(res){
 			configureBattleResume(res);
 			$("#battleresume_page .loader").hide();
-		});
-
+		});	
+		
+		
 		navigator.vibrate(500);
 	    $('.messages span').html('Partida Terminada');
     	$('.messages span').fadeIn(1500);
@@ -447,21 +440,21 @@ document.addEventListener('deviceready', function() {
 		var data = res;
 		
 		var winnerTeam = data[0].winner;
-		if (winnerTeam == 0)
+		if (winnerTeam == 0){
 			$('.battleResume-team').append('<span>Empate</span>');
+		}
 		else if (winnerTeam == 1){
 			$('.team.alpha .battleResume-team').append('<span>Ganador</span>');
-			$(".team.alpha").show();
 		}
 		else{
 			$('.team.bravo .battleResume-team').append('<span>Ganador</span>');
-			$(".team.bravo").show();
 		}
 
+		
 		$(".team").each(function(){
 			if ($(this).hasClass("alpha"))
 				var team = data[1].alpha_team;
-			else if ($(this).hasClass("bravo"))
+			else
 				var team = data[1].bravo_team;
 
 			$(this).find('[player-id]').each(function(index){
@@ -470,7 +463,7 @@ document.addEventListener('deviceready', function() {
 				
 				//battleResume-player
 				$(this).children().eq(0).html('<img src="'+playerImage(player.image.image.url)+'" class="playerPhotoResume"/><span>'+player.nickname+'</span>');
-
+				
 				//battleResume-kills
 				$(this).children().eq(1).html(player.kills);
 
@@ -487,6 +480,11 @@ document.addEventListener('deviceready', function() {
 				$(this).children().eq(4).html(player.ranking);
 			});
 		});
+
+		if (team_id == 1)
+			$("#battleresume_page .team.alpha").show();
+		else
+			$("#battleresume_page .team.bravo").show();
 	}
 
 	function configureMatch(team){
@@ -500,15 +498,15 @@ document.addEventListener('deviceready', function() {
     		if (counter == 1){
     			$(this).attr('player-id', currentPlayer_equipmentId);
 
-    			$.get(railsServer+'/matches/get_player?match_id='+match_id+'&player_id='+currentPlayer_equipmentId, function(res){
-    				//alert(playerImage(res.player.image.url));
-    				//var image = '<img src="'+playerImage(res.player.image.url)+'" class="playerPhoto"/><span>'+playerImage(res.player.image.url)+'</span>';
-    				//var image = '<img src="'+playerImage(res.player.image.url)+'" class="playerPhoto"/>';
-					//$(".playerImg").children().eq(1).remove();
-    				//$(".playerImg").prepend(image);
+    			setTimeout(function(){
+    				$.get(railsServer+'/matches/get_player?match_id='+match_id+'&player_id='+currentPlayer_equipmentId, function(res){
+	    				var image = '<img src="'+playerImage(res.player.image.url)+'" class="playerPhoto"/>';
+						$(".playerImg").children().eq(1).remove();
+	    				$(".playerImg").prepend(image);
 
-    				$(".team-flag-game span").html(res.team.name);
-    			});
+	    				$(".teamStatus .team-flag span").html(res.team.name);
+	    			});
+    			}, 2500);
     		}
     		else{
     			var playerId = team.shift();
@@ -516,9 +514,9 @@ document.addEventListener('deviceready', function() {
 
     			var selector = $(this);
     			$.get(railsServer+'/matches/get_player?match_id='+match_id+'&player_id='+playerId, function(res){
-    				//var image = '<img src="'+playerImage(res.player.image.url)+'" class="playerPhoto"/>';
-    				//selector.children().eq(1).remove();
-    				//selector.prepend(image);
+    				var image = '<img src="'+playerImage(res.player.image.url)+'" class="playerPhoto"/>';
+    				selector.children().eq(1).remove();
+    				selector.prepend(image);
     			});
     			
     		}
@@ -558,12 +556,12 @@ document.addEventListener('deviceready', function() {
 	function getMatchId(){
 		$.get(railsServer+"/matches/get_last_match", function(res){
 			var id = res != null ? res.id : 0;			
-			//match_id = id+1;
-			//alert(match_id);
+			match_id = id+1;
+			alert(match_id);
 		});
 
-		match_id = 1;
-		alert(match_id);
+		//match_id = 1;
+		//alert(match_id);
 	}
 
 	function hpAlert(hpPercentage, bar, vibration){
@@ -595,7 +593,9 @@ document.addEventListener('deviceready', function() {
 	}
 
 	function playerImage(url){
-		//alert(url);
+		if (url == null)
+			return './img/player_placeholder.png';
+		
 		var array = url.split('/');
 		var img = array.pop();
 		if (img != "player.png")
@@ -603,47 +603,6 @@ document.addEventListener('deviceready', function() {
 		else
 			return './img/player_placeholder.png';
 	}
-
-	//setInterval(deviceStates, 5000);
-	//deviceStates();
-	/*function deviceStates(){
-		$('[id-equipamiento]').each(function(index){
-			var children = $(this).children();
-
-			$.get(nodeServer+'/device_state/'+(index+1), function(res){
-				
-				children.eq(1).html("Desconectado");
-				children.eq(1).addClass("text-danger");
-				children.eq(1).removeClass("text-success");
-				children.eq(2).html("Desconectado");
-				children.eq(2).addClass("text-danger");
-				children.eq(2).removeClass("text-success");
-				children.eq(3).html("Desconectado");
-				children.eq(3).addClass("text-danger");
-				children.eq(3).removeClass("text-success");
-
-				if (res != ''){
-					var equipments = res;
-
-					if (equipments.indexOf('p') != -1){
-						children.eq(1).html("Conectado");
-						children.eq(1).toggleClass("text-danger");
-						children.eq(1).toggleClass("text-success");
-					}
-					if (equipments.indexOf('c') != -1){
-						children.eq(2).html("Conectado");
-						children.eq(2).toggleClass("text-danger");
-						children.eq(2).toggleClass("text-success");
-					}
-					if (equipments.indexOf('d') != -1){
-						children.eq(3).html("Conectado");
-						children.eq(3).toggleClass("text-danger");
-						children.eq(3).toggleClass("text-success");	
-					}
-				}
-			});
-		});
-	}*/
 
 	$(".team").on("click", function(){
 		$(".team").toggle();

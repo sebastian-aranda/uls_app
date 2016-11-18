@@ -31,7 +31,7 @@
     </head>
     
     <body>
-      <div class="view container-fluid" id="wait_page" style="">
+      <div class="view container-fluid" id="wait_page" style="display:block;">
         <div class="row">
           <div class="col-xs-12 text-center">
             <img src="img/logo_inapp.png" alt="Ultimate Laser Shot" style="height:80px;width:auto;">
@@ -55,7 +55,7 @@
             </div>
             
             <div class="col-xs-10 pbContainer">
-                <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
                   <img class="bar-icon" src="img/shield_icon.png" alt="Shield Bar">
                 </div></div>
                 <div class="progress"><div class="health-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
@@ -70,7 +70,7 @@
             <div player-id="2" class="partner">
               <img src="img/eliminated.png" class="eliminated" style="display:none;">
               <img src="img/player_placeholder.png" class="playerPhoto" alt="">
-              <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+              <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
                 <!--<img class="bar-icon" src="img/shield_icon.png" alt="Shield Bar">-->
               </div></div>
               <div class="progress"><div class="health-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
@@ -83,7 +83,7 @@
             <div player-id="3" class="partner">
               <img src="img/eliminated.png" class="eliminated" style="display:none;">
               <img src="img/player_placeholder.png" class="playerPhoto" alt="">
-              <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+              <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
                 <!--<img class="bar-icon" src="img/shield_icon.png" alt="Shield Bar">-->
               </div></div>
               <div class="progress"><div class="health-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
@@ -115,7 +115,7 @@
             <div player-id="4" class="partner">
               <img src="img/eliminated.png" class="eliminated" style="display:none;">
               <img src="img/player_placeholder.png" class="playerPhoto" alt="">
-              <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+              <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
                 <!--<img class="bar-icon" src="img/shield_icon.png" alt="Shield Bar">-->
               </div></div>
               <div class="progress"><div class="health-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
@@ -128,7 +128,7 @@
             <div player-id="5" class="partner">
               <img src="img/eliminated.png" class="eliminated" style="display:none;">
               <img src="img/player_placeholder.png" class="playerPhoto" alt="">
-              <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+              <div class="progress"><div class="shield-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
                 <!--<img class="bar-icon" src="img/shield_icon.png" alt="Shield Bar">-->
               </div></div>
               <div class="progress"><div class="health-bar progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
@@ -159,6 +159,7 @@
       </div>
 
       <div class="view container-fluid" id="battleresume_page" style="display:none;">
+        <div class="row loader"><img src="img/loader.svg"></div>
         <div class="row row-eq-height team alpha">
           <div class="col-xs-3 battleResume-team">
             <img src="img/team_alpha.png" alt="Alpha Team">

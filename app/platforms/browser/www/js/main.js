@@ -1,6 +1,6 @@
 document.addEventListener('deviceready', function() {
-	//var nodeServer = 'http://192.168.0.101:3030';
-	var nodeServer = 'http://192.168.0.101:3030';
+	var nodeServer = 'http://localhost:3030';
+	//var nodeServer = 'http://192.168.0.102:3030';
 	var railsServer = 'http://192.168.0.102:3000';
 	//var railsServer = 'http://uls2016.herokuapp.com';
 	
@@ -10,16 +10,17 @@ document.addEventListener('deviceready', function() {
 	var placas = [54355, 0, 0, 0, 0, 9171109, 762964, 0, 0];
 	
 	//var duenios = ['Edo','Enzo','3','4','5', 'Seba','Marco','8','9','10']
-	var dispositivos = ['93cc5f1b1a3a8ca0', '55c9689c7200138e', '3', '4', '5', '59971d75d4fd1252', 'a8feb38a3117c721', '8', '9', '10'];
+	//var dispositivos = ['93cc5f1b1a3a8ca0', '55c9689c7200138e', '3', '4', '5', '59971d75d4fd1252', 'a8feb38a3117c721', '8', '9', '10'];
+	var dispositivos = ['ffff1f36d06358a3', '55c9689c7200138e', '3', '4', '5', '59971d75d4fd1252', 'a8feb38a3117c721', '8', '9', '10'];
 
-	var matchTimerValue = 0.1*60*1000; //Number of milliseconds
+	var matchTimerValue = 10*60*1000; //Number of milliseconds
 	var bombTimerValue = 1*60*1000;
 
 	var match_id, team_id;
 	var bomb_state = 0;
 	getMatchId();
 	
-	var estadoPartida = 0;
+	var estadoPartida = 1;
 	var time, originalTime;
 	
 	var buttonActive = {idButton: '', state: 0};
@@ -102,9 +103,13 @@ document.addEventListener('deviceready', function() {
 	$('.playerStatus, .partner').on('click', function(){
 		if (estadoPartida == 1){
 			var player_id = $(this).attr('player-id');
+			var player_hp = $(this).find('.health-bar').attr('aria-valuenow');
+			var player_shield = $(this).find('.shield-bar').attr('aria-valuenow');
 			
 			//Activate Medikit
 			if (buttonActive.state == 1 && buttonActive.idButton == 'buttonMedikit'){
+				if (player_hp == 0 || player_hp == 100)
+					return;
 				$.post(railsServer+'/matches/heal_user?match_id='+match_id+'&player_id='+player_id, function(res){});
 				$.get(nodeServer+'/heal_user/'+match_id+'/'+player_id, function(res){});
 
@@ -120,6 +125,8 @@ document.addEventListener('deviceready', function() {
 
 			//Activate Vest
 			else if (buttonActive.state == 1 && buttonActive.idButton == 'buttonVest'){
+				if (player_hp == 0 || player_shield == 100)
+					return;
 				$.post(railsServer+'/matches/add_vest?match_id='+match_id+'&player_id='+player_id, function(res){});
 				$.get(nodeServer+'/add_vest/'+match_id+'/'+player_id, function(res){});
 
@@ -150,7 +157,6 @@ document.addEventListener('deviceready', function() {
         			configureMatch([1,2,3,4,5]);
         		else
         			configureMatch([6,7,8,9,10]);
-
         		startMatch(data.match_id);
         		break;
         	case 'receive_shot':
@@ -194,6 +200,10 @@ document.addEventListener('deviceready', function() {
 
 	function handleReceiveShot(match_id, shooted_id){
 		var player_id = $('.playerStatus').attr('player-id');
+		
+		var shooted_hp = $('[player-id="'+shooted_id+'"] .health-bar').attr('aria-valuenow');
+		if (shooted_hp == 0)
+			return;
 		
 		if (player_id == shooted_id) 
 			navigator.vibrate(500);
@@ -268,6 +278,7 @@ document.addEventListener('deviceready', function() {
 
     function handleDefusingBomb(msg){
     	estadoPartida = 0;
+    	//TODO: bomb_state = 1;
 
 		$.get(railsServer+'/matches/resume_match?match_id='+match_id, function(res){
 			configureBattleResume(res);
@@ -284,8 +295,11 @@ document.addEventListener('deviceready', function() {
     }
 
     function handlePlayerDie(id){
-    	$('.messages span').html('Jugador '+id+' ha muerto');
-		$('.messages span').fadeIn(1500).fadeOut(1500);	
+    	var currentPlayer_id = $('.playerStatus').attr('player-id');
+    	if (id != currentPlayer_id){
+    		$('.messages span').html('Jugador '+id+' ha muerto');
+			$('.messages span').fadeIn(1500).fadeOut(1500);
+    	}
     }
 
     //Accion cuando muere un jugador
@@ -299,15 +313,14 @@ document.addEventListener('deviceready', function() {
 
     	if (hp <= 0 && player_id != currentPlayer_id){
     		eliminated = container.find('.eliminated').show();
-    		navigator.vibrate(500);
-			
+    		navigator.vibrate(500);			
 			playerDieAlert(player_id);
-    		
     	}
     	else if (hp <= 0 && player_id == currentPlayer_id){
     		eliminated = container.find('.eliminated').show();
 			navigator.vibrate(500);	
 			$('.messages span').html('Has perdido');
+			$('.messages span').fadeIn(1500).fadeOut(1500);
 
 			estadoPartida = 0;
 			clearInterval(hpAlertInterval);
@@ -346,21 +359,23 @@ document.addEventListener('deviceready', function() {
 		estadoPartida = 0;
 		clearInterval(hpAlertInterval);
 
+		$("#battleresume_page .team").hide();
 		$("#battleresume_page .loader").show();
+
 		$.get(railsServer+'/matches/resume_match?match_id='+match_id, function(res){
 			configureBattleResume(res);
 			$("#battleresume_page .loader").hide();
 		});
 
-		setTimeout(function(){
+		navigator.vibrate(500);
+	    $('.messages span').html('Partida Terminada');
+    	$('.messages span').fadeIn(1500);
+
+    	setTimeout(function(){
     		$("#matchstatus_page").hide();
     		$("#battleresume_page").fadeIn(1500);
     		
     	}, 2500);
-
-		navigator.vibrate(500);
-	    $('.messages span').html('Partida Terminada');
-    	$('.messages span').fadeIn(1500);
 
 	}
 	
@@ -436,15 +451,15 @@ document.addEventListener('deviceready', function() {
 			$('.battleResume-team').append('<span>Empate</span>');
 		else if (winnerTeam == 1){
 			$('.team.alpha .battleResume-team').append('<span>Ganador</span>');
-			$(".team.bravo").hide();
+			$(".team.alpha").show();
 		}
 		else{
 			$('.team.bravo .battleResume-team').append('<span>Ganador</span>');
-			$(".team.alpha").hide();
+			$(".team.bravo").show();
 		}
 
 		$(".team").each(function(){
-			if ($(this).hasClass("alpha")){
+			if ($(this).hasClass("alpha"))
 				var team = data[1].alpha_team;
 			else if ($(this).hasClass("bravo"))
 				var team = data[1].bravo_team;
@@ -454,7 +469,7 @@ document.addEventListener('deviceready', function() {
 				var player = team[index];
 				
 				//battleResume-player
-				$(this).children().eq(0).html('<img src="'+playerImage(railsServer+player.image.url)+'" alt="" class="playerPhotoResume"/><span>'+player.nickname+'</span>');
+				$(this).children().eq(0).html('<img src="'+playerImage(player.image.image.url)+'" class="playerPhotoResume"/><span>'+player.nickname+'</span>');
 
 				//battleResume-kills
 				$(this).children().eq(1).html(player.kills);
@@ -486,11 +501,13 @@ document.addEventListener('deviceready', function() {
     			$(this).attr('player-id', currentPlayer_equipmentId);
 
     			$.get(railsServer+'/matches/get_player?match_id='+match_id+'&player_id='+currentPlayer_equipmentId, function(res){
-    				var image = '<img src="'+playerImage(railsServer+player.image.url)+'" class="playerPhoto" alt=""/>';
+    				//var image = '<img src="'+playerImage(res.player.image.url)+'" class="playerPhoto"/><span>'+playerImage(res.player.image.url)+'</span>';
+    				var image = '<img src="'+playerImage(res.player.image.url)+'" class="playerPhoto"/>';
+    				alert(image);
 					$(".playerImg").children().eq(1).remove();
     				$(".playerImg").prepend(image);
 
-    				$(".team-flag span").html(res.team.name);
+    				$(".team-flag-game span").html(res.team.name);
     			});
     		}
     		else{
@@ -499,7 +516,7 @@ document.addEventListener('deviceready', function() {
 
     			var selector = $(this);
     			$.get(railsServer+'/matches/get_player?match_id='+match_id+'&player_id='+playerId, function(res){
-    				var image = '<img src="'+playerImage(railsServer+player.image.url)+'" class="playerPhoto" alt=""/>';
+    				var image = '<img src="'+playerImage(res.player.image.url)+'" class="playerPhoto"/>';
     				selector.children().eq(1).remove();
     				selector.prepend(image);
     			});
@@ -541,12 +558,12 @@ document.addEventListener('deviceready', function() {
 	function getMatchId(){
 		$.get(railsServer+"/matches/get_last_match", function(res){
 			var id = res != null ? res.id : 0;			
-			//match_id = id+1;
-			//alert(match_id);
+			match_id = id+1;
+			alert(match_id);
 		});
 
-		match_id = 2;
-		alert(match_id);
+		//match_id = 1;
+		//alert(match_id);
 	}
 
 	function hpAlert(hpPercentage, bar, vibration){
@@ -562,7 +579,7 @@ document.addEventListener('deviceready', function() {
 			}
 
 			if (vibration){
-				var seconds = parseInt((hpPercentage*2)/50*1000);
+				var seconds = parseInt((hpPercentage*2.5)/50*1000);
 				var timer_seconds = parseInt(hpPercentage/50*500+200);
 				clearInterval(hpAlertInterval);
 				hpAlertInterval = setInterval(function(){
@@ -582,9 +599,9 @@ document.addEventListener('deviceready', function() {
 		var array = url.split('/');
 		var img = array.pop();
 		if (img != "player.png")
-			return url;
+			return railsServer+url;
 		else
-			return "http://192.168.0.102:3000/assets/jugador-7b8b2ce4726b6fa2fd6c4e0f5db251160cc419ddf2dcf5804e39d1d0689d2a72.png";
+			return './img/player_placeholder.png';
 	}
 
 	//setInterval(deviceStates, 5000);

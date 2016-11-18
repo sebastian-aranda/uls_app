@@ -53,9 +53,9 @@ body{
 	padding-top: 16px;
 }
 
-.playerStatus .playerPhoto{
+.partner .playerPhoto, .playerStatus .playerPhoto{
 	width: 100%;
-	height: auto;
+	height: 72px;
 }
 
 .playerPhotoResume{
@@ -64,34 +64,29 @@ body{
 }
 
 .playerStatus .pbContainer{
-	padding:16px;
+	padding:0 16px;
 }
 
 .playerStatus .bar-icon{
-	height: 20px;
+	height: 16px;
 	width: auto;
 }
 
 .teamStatus{
-	margin-top: 48px;
+	margin-top: 32px;
 }
 
 .partner{
 	position: relative;
 }
 
-.partner .playerPhoto{
-	width: 100%;
-	height: auto;
-}
-
+/*
+//For bar-icons
 .partner .bar-icon{
-	height: 8px;
+	height: 6px;
 	width: auto;
 }
 
-/*
-//For bar-icons
 .partner .progress{
 	margin-left: 10px;
 }*/
@@ -217,7 +212,7 @@ body{
 	position: absolute;
 	z-index: 100;
 	width: 100%;
-	height: auto;
+	height: 72px;
 	top:0;
 	left:0;
 }
